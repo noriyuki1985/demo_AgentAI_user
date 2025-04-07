@@ -103,7 +103,7 @@
     async function fetchCustomerData() {
       try {
         // 「getAll」タイプで全データを取得するURL
-        const url = "https://script.google.com/macros/s/AKfycbwO_PVN1y6ZPrtV21YQK5dD1GR5nLK2FSAUjzO74noyHDP-JvETD45hd3tWZ7W6r3jC/exec?type=getAll";
+        const url = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLjWoDP8rmEUyvLSmWvCKz7Na3pN1DJqco1XqSmQrNylH9hV2nnMSuobNpjbQPELbC1_4M-fRxHOwegN3iWya4t_53M6nuhUf1r-kupkQdSFY4uDK2CZKUu_gM5f4Hla9kivTWkRgvROfhRlTR5hNx5q2NDC6fF93nfJFz966bAAJhK0PENt2IxDP-pbrcrwKQZ3NHEA3OsidkF-iULbUcVV3pyqZf2uqd4-zNcX5Wzbxe6soPoS0aevVYOo_qoILrR4PO7_1cxSFth5k-VWNuNdUpazR4MP7nNV5mLGQSNyL3LqOqQ&lib=MDZUUTRJxMBEuuaiVotVbVWdJHcgl-QcZ";
         const response = await fetch(url);
         const data = await response.json();
         // data は顧客情報のオブジェクトの配列
