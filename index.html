@@ -53,22 +53,23 @@
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       
-      // 特例: メールアドレスが "owner@owner" かつパスワードが "a" の場合は、直接オーナー用ダッシュボードへ
-      if(email.toLowerCase() === "owner@owner" && password === "a") {
+      // 分岐①：Ownerの場合
+      if (email.toLowerCase() === "owner@owner" && password === "a") {
         window.location.href = "dashboard_owner.html";
         return;
       }
       
+      // 分岐②：その他の場合
       try {
-        // Apps Script のログインAPIのURLを指定
+        // Apps Script のログインAPIのURL（demo_AgentAI_DB のシート1からデータを取得する）
         const scriptUrl = "https://script.google.com/macros/s/AKfycbyTpjISP_ED0hDFucZbFR6fOuFtiAza9kSeG72YC5l4YBsX-MRTBBs0uFVj7ljdl-SV/exec";
         const loginUrl = scriptUrl + "?type=login&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
         
         const res = await fetch(loginUrl);
         const data = await res.json();
         
-        if(data.success) {
-          // DBから該当ユーザーの情報を取得し sessionStorage に保存（dashboard_user.html で利用可能）
+        if (data.success) {
+          // 取得した顧客情報の全データを sessionStorage に保存
           sessionStorage.setItem("userData", JSON.stringify(data));
           window.location.href = "dashboard_user.html";
         } else {
