@@ -222,7 +222,7 @@
       const menu = document.getElementById("myMenu");
       menu.classList.toggle("show");
     }
-    // メニュー外をクリックしたらメニューを閉じる
+    // メニュー外クリックでメニューを閉じる
     window.onclick = function(event) {
       const menu = document.getElementById("myMenu");
       if (!event.target.matches('.menu-button') && !event.target.closest('.dropdown-menu')) {
@@ -239,11 +239,10 @@
     function createNewCategory() {
       alert("新規カテゴリ作成機能（デモ）：ここで新しいカテゴリを作成するフォームを表示します。");
     }
-
     // カテゴリ一覧を取得して表示する関数（fetchCategoriesと命名）
     async function fetchCategories() {
       try {
-        const res = await fetch('https://script.google.com/macros/s/AKfycbyX62whHRIVJ9ufxiHkd5GeLwbW587dD706CNfDFvTYzibXiMLxoNbm9WS_by-ToJ7J/exec');
+        const res = await fetch('https://script.google.com/macros/s/AKfycbzbfmrWNod8FiMOaUxlvKksu7jnTt903I4RPGXOeiCMaNiBnE533q6W0BV8WT_egiM/exec');
         const categories = await res.json();
         const grid = document.querySelector('.category-grid');
         grid.innerHTML = ''; // 既存の内容をクリア
@@ -259,7 +258,6 @@
         console.error('カテゴリの取得に失敗しました:', error);
       }
     }
-
     // ページ読み込み時にカテゴリ一覧を表示
     window.onload = fetchCategories;
   </script>
