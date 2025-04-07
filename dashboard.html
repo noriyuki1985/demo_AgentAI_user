@@ -25,7 +25,6 @@
     header .api-select {
       font-size: 16px;
     }
-    /* ユーザー名表示 */
     header .user-name {
       font-size: 16px;
       font-weight: bold;
@@ -76,7 +75,7 @@
       flex: 1;
       display: flex;
     }
-    /* 左側：チャット履歴（固定） */
+    /* 左側：チャット履歴 */
     #sidebar {
       width: 250px;
       background: #fafafa;
@@ -107,7 +106,7 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    /* 新規カテゴリ作成エリア */
+    /* 新規カテゴリ作成ボタン */
     #newCategoryHeader {
       display: flex;
       align-items: center;
@@ -122,21 +121,39 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    /* 新規カテゴリ作成フォーム（初期は非表示） */
-    #newCategoryForm {
-      margin-top: 10px;
+    /* モーダル（背景） */
+    #newCategoryModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: none;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
     }
-    #newCategoryForm input[type="text"] {
+    /* モーダルのコンテンツ */
+    #newCategoryModal .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      min-width: 300px;
+    }
+    #newCategoryModal .modal-content input[type="text"] {
       padding: 8px;
       font-size: 14px;
       width: 200px;
       margin-right: 10px;
     }
-    #newCategoryForm button {
+    #newCategoryModal .modal-content button {
       padding: 8px 16px;
       font-size: 14px;
       cursor: pointer;
+      margin-right: 5px;
     }
     /* 大きな四角のカテゴリボタン */
     .category-grid {
@@ -215,17 +232,21 @@
       <div id="categoryContainer">
         <!-- 新規カテゴリ作成ボタン -->
         <div id="newCategoryHeader">
-          <button id="newCategoryButton" onclick="toggleNewCategoryForm()">＋カテゴリの新規作成</button>
+          <button id="newCategoryButton" onclick="openNewCategoryModal()">＋カテゴリの新規作成</button>
         </div>
-        <!-- 新規カテゴリ作成フォーム -->
-        <div id="newCategoryForm">
-          <input type="text" id="newCategoryName" placeholder="カテゴリ名を入力">
-          <button onclick="submitNewCategory()">作成</button>
-          <button onclick="toggleNewCategoryForm()">キャンセル</button>
+        <!-- モーダルポップアップ -->
+        <div id="newCategoryModal">
+          <div class="modal-content">
+            <h3>新規カテゴリ作成</h3>
+            <input type="text" id="newCategoryName" placeholder="カテゴリ名を入力">
+            <br><br>
+            <button onclick="submitNewCategory()">作成</button>
+            <button onclick="closeNewCategoryModal()">キャンセル</button>
+          </div>
         </div>
         <!-- 大きな四角のカテゴリボタン -->
         <div class="category-grid">
-          <!-- ここにAPIから取得したカテゴリボタンが動的に追加されます -->
+          <!-- APIから取得したカテゴリボタンが動的に追加されます -->
         </div>
         <!-- リスト表示のカテゴリ詳細 -->
         <div class="category-list">
@@ -249,7 +270,7 @@
       const menu = document.getElementById("myMenu");
       if (!event.target.matches('.menu-button') && !event.target.closest('.dropdown-menu')) {
         if (menu.classList.contains('show')) {
-          menu.classList.remove('show');
+          menu.classList.remove("show");
         }
       }
     }
@@ -257,12 +278,15 @@
     function selectCategory(category) {
       alert("「" + category + "」を選択しました。ここから詳細画面に遷移します（デモ）。");
     }
-    // 新規カテゴリ作成フォームの表示/非表示切替
-    function toggleNewCategoryForm() {
-      const form = document.getElementById("newCategoryForm");
-      form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+    // モーダルを表示する関数
+    function openNewCategoryModal() {
+      document.getElementById("newCategoryModal").style.display = "block";
     }
-    // 新規カテゴリ作成の送信処理（POST用URLに変更）
+    // モーダルを閉じる関数
+    function closeNewCategoryModal() {
+      document.getElementById("newCategoryModal").style.display = "none";
+    }
+    // 新規カテゴリ作成の送信処理（POST用URLを使用）
     async function submitNewCategory() {
       const input = document.getElementById("newCategoryName");
       const categoryName = input.value.trim();
@@ -270,7 +294,6 @@
         alert("カテゴリ名を入力してください。");
         return;
       }
-      
       try {
         const params = new URLSearchParams();
         params.append('category', categoryName);
@@ -283,8 +306,8 @@
         if (result.result === "success") {
           alert("カテゴリを追加しました！");
           input.value = "";
-          toggleNewCategoryForm();
-          fetchCategories(); // 新しいカテゴリ一覧を再取得
+          closeNewCategoryModal();
+          fetchCategories(); // カテゴリ一覧を再取得
         } else {
           alert("エラーが発生しました: " + result.message);
         }
@@ -292,14 +315,13 @@
         console.error('カテゴリ追加に失敗しました:', error);
       }
     }
-    // カテゴリ一覧を取得して表示する関数（GET用URLは従来のものを使用）
+    // カテゴリ一覧を取得して表示する関数（GET用URLを使用）
     async function fetchCategories() {
       try {
         const res = await fetch('https://script.google.com/macros/s/AKfycbzbfmrWNod8FiMOaUxlvKksu7jnTt903I4RPGXOeiCMaNiBnE533q6W0BV8WT_egiM/exec');
         const categories = await res.json();
         const grid = document.querySelector('.category-grid');
-        grid.innerHTML = ''; // 既存の内容をクリア
-
+        grid.innerHTML = '';
         categories.forEach(cat => {
           const div = document.createElement('div');
           div.className = 'category-btn';
