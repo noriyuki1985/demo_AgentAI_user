@@ -20,7 +20,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
-      position: relative; /* ドロップダウンメニューの位置指定に備える */
+      position: relative; /* ドロップダウンメニューの位置指定用 */
     }
     header .api-select {
       font-size: 16px;
@@ -41,7 +41,7 @@
     }
     .dropdown-menu {
       position: absolute;
-      top: 60px;  /* ヘッダー高さ分 + 少し余白 */
+      top: 60px;  /* ヘッダー下部に表示 */
       right: 0;
       background: #fff;
       border: 1px solid #ccc;
@@ -93,7 +93,7 @@
       cursor: pointer;
     }
 
-    /* 中央：チャット欄 */
+    /* 中央：チャットUI */
     #main {
       flex: 1;
       display: flex;
@@ -108,3 +108,118 @@
     .message {
       margin-bottom: 15px;
     }
+    .ai { color: #333; }
+    .user { text-align: right; color: #007bff; }
+
+    /* 入力エリア */
+    #chatInputArea {
+      display: flex;
+      border-top: 1px solid #ccc;
+      padding: 10px;
+    }
+    #chatInputArea input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #chatInputArea button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <!-- 左側: API選択 -->
+    <div class="api-select">
+      API選択:
+      <select id="apiDropdown">
+        <option value="chatgpt-3.5">ChatGPT-3.5</option>
+        <option value="chatgpt-4">ChatGPT-4</option>
+        <option value="chatgpt-4.5">ChatGPT-4.5</option>
+      </select>
+    </div>
+
+    <!-- 右側: マイページメニュー（ポップアップ） -->
+    <div class="menu-container">
+      <button class="menu-button" onclick="toggleMenu()">▼</button>
+      <div id="myMenu" class="dropdown-menu">
+        <div class="menu-item">マイGPT</div>
+        <div class="menu-item">ChatGPTをカスタマイズする</div>
+        <div class="menu-item">設定</div>
+        <div class="menu-item">プランをアップグレードする</div>
+        <div class="menu-item">ChatGPTの検索拡張機能を取得する</div>
+        <div class="menu-item" onclick="logout()">ログアウト</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- メインコンテナ -->
+  <div id="container">
+    <!-- 左側：チャット履歴 -->
+    <div id="sidebar">
+      <h2>チャット履歴</h2>
+      <div class="chat-item">💬 サンプルチャット 2023-04-07</div>
+      <div class="chat-item">💬 サンプルチャット 2023-04-06</div>
+    </div>
+
+    <!-- 中央：チャットUI -->
+    <div id="main">
+      <div id="chat">
+        <div class="message ai">AI: こんにちは！ご質問をどうぞ。</div>
+      </div>
+      <div id="chatInputArea">
+        <input type="text" id="userInput" placeholder="ここに質問を入力">
+        <button onclick="sendMessage()">送信</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // メニューの表示/非表示切替
+    function toggleMenu() {
+      const menu = document.getElementById("myMenu");
+      menu.classList.toggle("show");
+    }
+    // 画面外クリックでメニューを閉じる
+    window.onclick = function(event) {
+      const menu = document.getElementById("myMenu");
+      if (!event.target.matches('.menu-button') && !event.target.closest('.dropdown-menu')) {
+        if (menu.classList.contains('show')) {
+          menu.classList.remove('show');
+        }
+      }
+    }
+    // ログアウト（デモ用）
+    function logout() {
+      alert("ログアウトしました（デモ）");
+      // 実際には login.html などへ遷移
+    }
+    // チャット送信処理
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+      const chat = document.getElementById("chat");
+      
+      // ユーザーのメッセージ表示
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.textContent = "あなた: " + text;
+      chat.appendChild(userMsg);
+      
+      // デモ用の AI レスポンス
+      const aiMsg = document.createElement("div");
+      aiMsg.className = "message ai";
+      aiMsg.textContent = "AI (" + document.getElementById("apiDropdown").value + "): ご質問ありがとうございます！";
+      chat.appendChild(aiMsg);
+      
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
