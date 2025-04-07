@@ -2,83 +2,132 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ログイン - エージェントAIプラットフォーム</title>
+  <title>Owner Dashboard - エージェントAIプラットフォーム</title>
   <style>
     body {
+      margin: 0;
       font-family: sans-serif;
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 20px;
-      text-align: center;
+      background: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
-    h1 {
-      margin-bottom: 30px;
+    /* ヘッダー */
+    header {
+      height: 60px;
+      background: #333;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
     }
-    label {
-      display: block;
-      margin-top: 20px;
+    header .title {
+      font-size: 22px;
       font-weight: bold;
     }
-    input {
-      width: 100%;
-      padding: 8px;
+    header .user-info {
       font-size: 16px;
-      margin-top: 5px;
     }
-    button {
-      margin-top: 30px;
-      padding: 10px 20px;
-      font-size: 16px;
+    /* メインエリア */
+    #main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    /* 顧客一覧パネル */
+    .owner-panel {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .owner-panel h3 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    /* 顧客一覧テーブル */
+    .owner-table {
       width: 100%;
+      border-collapse: collapse;
+    }
+    .owner-table th, .owner-table td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    .owner-table th {
+      background: #f5f5f5;
+    }
+    .owner-table a {
+      color: blue;
+      text-decoration: underline;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>ログイン</h1>
-  <form id="loginForm">
-    <label>メールアドレス</label>
-    <input type="email" id="email" placeholder="メールアドレスを入力" required>
-    
-    <label>パスワード</label>
-    <input type="password" id="password" placeholder="パスワードを入力" required>
-    
-    <button type="submit">ログイン</button>
-  </form>
+  <!-- ヘッダー -->
+  <header>
+    <div class="title">Owner Dashboard</div>
+    <div class="user-info">Owner: 一花徳行</div>
+  </header>
   
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      
-      // 特例：メールアドレスが "owner" かつパスワードが "a" の場合
-      if(email.toLowerCase() === "owner" && password === "a") {
-        window.location.href = "dashboard_owner.html";
-        return;
-      }
-      
-      try {
-        // Apps Script側のログインAPIのURLに、type=login, email, password のパラメータを付加して呼び出す
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbyTpjISP_ED0hDFucZbFR6fOuFtiAza9kSeG72YC5l4YBsX-MRTBBs0uFVj7ljdl-SV/exec";
-        const loginUrl = scriptUrl + "?type=login&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
-        
-        const res = await fetch(loginUrl);
-        const data = await res.json();
-        
-        if(data.success) {
-          // 取得したDBの全データを sessionStorage に保存（次のページで利用できるように）
-          sessionStorage.setItem("userData", JSON.stringify(data));
-          window.location.href = "dashboard_user.html";
-        } else {
-          alert("ログイン失敗: " + data.message);
-        }
-      } catch (error) {
-        console.error("ログイン処理でエラー:", error);
-        alert("ログイン処理に失敗しました。");
-      }
-    });
-  </script>
+  <!-- メインエリア -->
+  <div id="main">
+    <!-- 顧客一覧パネル -->
+    <div class="owner-panel">
+      <h3>顧客一覧</h3>
+      <table class="owner-table">
+        <thead>
+          <tr>
+            <th>お客様ID</th>
+            <th>会社名</th>
+            <th>お名前</th>
+            <th>権限</th>
+            <th>カテゴリ</th>
+            <th>エージェント</th>
+            <th>直近のログイン時間</th>
+            <th>詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- サンプルデータ -->
+          <tr>
+            <td>001</td>
+            <td>株式会社A</td>
+            <td>山田太郎</td>
+            <td>User</td>
+            <td>営業, マーケティング</td>
+            <td>営業ナビゲーターX, マーケティングプランナー Alpha</td>
+            <td>2025-04-08 10:00</td>
+            <td><a href="customer_detail.html?id=001">詳細</a></td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>株式会社B</td>
+            <td>佐藤花子</td>
+            <td>Admin</td>
+            <td>マーケティング, 経理</td>
+            <td>マーケティングプランナー Zeta, 経理マスター Beta</td>
+            <td>2025-04-08 10:30</td>
+            <td><a href="customer_detail.html?id=002">詳細</a></td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>株式会社C</td>
+            <td>田中一郎</td>
+            <td>Owner</td>
+            <td>経理, 営業</td>
+            <td>経理エキスパート Omega, 営業ナビゲーター Y</td>
+            <td>2025-04-08 11:00</td>
+            <td><a href="customer_detail.html?id=003">詳細</a></td>
+          </tr>
+          <!-- 必要に応じてさらに行を追加 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
 </body>
 </html>
