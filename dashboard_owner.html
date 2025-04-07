@@ -92,42 +92,46 @@
             <th>詳細</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- サンプルデータ -->
-          <tr>
-            <td>001</td>
-            <td>株式会社A</td>
-            <td>山田太郎</td>
-            <td>User</td>
-            <td>営業, マーケティング</td>
-            <td>営業ナビゲーターX, マーケティングプランナー Alpha</td>
-            <td>2025-04-08 10:00</td>
-            <td><a href="customer_detail.html?id=001">詳細</a></td>
-          </tr>
-          <tr>
-            <td>002</td>
-            <td>株式会社B</td>
-            <td>佐藤花子</td>
-            <td>Admin</td>
-            <td>マーケティング, 経理</td>
-            <td>マーケティングプランナー Zeta, 経理マスター Beta</td>
-            <td>2025-04-08 10:30</td>
-            <td><a href="customer_detail.html?id=002">詳細</a></td>
-          </tr>
-          <tr>
-            <td>003</td>
-            <td>株式会社C</td>
-            <td>田中一郎</td>
-            <td>Owner</td>
-            <td>経理, 営業</td>
-            <td>経理エキスパート Omega, 営業ナビゲーター Y</td>
-            <td>2025-04-08 11:00</td>
-            <td><a href="customer_detail.html?id=003">詳細</a></td>
-          </tr>
-          <!-- 必要に応じてさらに行を追加 -->
+        <tbody id="userTableBody">
+          <!-- ここに全顧客情報が表示されます -->
         </tbody>
       </table>
     </div>
   </div>
+  
+  <script>
+    async function fetchAllUsers() {
+      try {
+        // 全顧客情報取得用のURL（?type=getAll を付与）
+        const url = "https://script.google.com/macros/s/AKfycbwO_PVN1y6ZPrtV21YQK5dD1GR5nLK2FSAUjzO74noyHDP-JvETD45hd3tWZ7W6r3jC/exec?type=getAll";
+        const res = await fetch(url);
+        const users = await res.json();
+        
+        const tbody = document.getElementById("userTableBody");
+        tbody.innerHTML = "";
+        
+        users.forEach(user => {
+          // ここでは、Apps Script から返される JSON のプロパティ名を以下のように仮定しています。
+          // customerId, companyName, userName, role, category, agent, lastLogin
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${user.customerId || ""}</td>
+            <td>${user.companyName || ""}</td>
+            <td>${user.userName || ""}</td>
+            <td>${user.role || ""}</td>
+            <td>${user.category || ""}</td>
+            <td>${user.agent || ""}</td>
+            <td>${user.lastLogin || ""}</td>
+            <td><a href="customer_detail.html?id=${user.customerId || ""}">詳細</a></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (error) {
+        console.error("ユーザーデータの取得に失敗しました:", error);
+      }
+    }
+    
+    window.onload = fetchAllUsers;
+  </script>
 </body>
 </html>
