@@ -37,8 +37,8 @@
 <body>
   <h1>ログイン</h1>
   <form id="loginForm">
-    <label>メールアドレス</label>
-    <input type="email" id="email" placeholder="メールアドレスを入力" required>
+    <label>ユーザーネーム</label>
+    <input type="text" id="username" placeholder="ユーザーネームを入力" required>
     
     <label>パスワード</label>
     <input type="password" id="password" placeholder="パスワードを入力" required>
@@ -47,11 +47,18 @@
   </form>
   
   <script>
-    // フォーム送信時に、どんな入力でもログイン成功として dashboard.html へ遷移
     document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      // ログイン処理（デモなのでバリデーションなし）
-      window.location.href = "dashboard.html";
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      
+      if (username === "user" && password === "a") {
+        window.location.href = "dashboard_user.html";
+      } else if (username === "admin" && password === "a") {
+        window.location.href = "dashboard_admin.html";
+      } else {
+        alert("ユーザーネームまたはパスワードが正しくありません。");
+      }
     });
   </script>
 </body>
