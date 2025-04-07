@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>AIエージェントプラットフォーム - ダッシュボード</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    /* ヘッダー */
+    header {
+      height: 60px;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    header .api-select {
+      font-size: 16px;
+    }
+    header button {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+    }
+    /* メイン領域 */
+    #container {
+      flex: 1;
+      display: flex;
+    }
+    /* 左側：チャット履歴 */
+    #sidebar {
+      width: 250px;
+      background: #fafafa;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    #sidebar h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .chat-item {
+      padding: 10px;
+      background: #fff;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    /* 中央：チャット欄 */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    #chat {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #eee;
+    }
+    .message {
+      margin-bottom: 15px;
+    }
+    .ai { color: #333; }
+    .user { text-align: right; color: #007bff; }
+    /* 入力エリア */
+    #chatInputArea {
+      display: flex;
+      border-top: 1px solid #ccc;
+      padding: 10px;
+    }
+    #chatInputArea input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #chatInputArea button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <div class="api-select">
+      API選択:
+      <select id="apiDropdown">
+        <option value="chatgpt-3.5">ChatGPT-3.5</option>
+        <option value="chatgpt-4">ChatGPT-4</option>
+        <option value="chatgpt-4.5">ChatGPT-4.5</option>
+      </select>
+    </div>
+    <button onclick="location.href='mypage.html'">マイページ</button>
+  </header>
+
+  <!-- コンテナ -->
+  <div id="container">
+    <!-- 左側：チャット履歴 -->
+    <div id="sidebar">
+      <h2>チャット履歴</h2>
+      <!-- 例として固定項目 -->
+      <div class="chat-item">💬 サンプルチャット 2023-04-07</div>
+      <div class="chat-item">💬 サンプルチャット 2023-04-06</div>
+    </div>
+    <!-- 中央：チャットUI -->
+    <div id="main">
+      <div id="chat">
+        <div class="message ai">AI: こんにちは！ご質問をどうぞ。</div>
+      </div>
+      <div id="chatInputArea">
+        <input type="text" id="userInput" placeholder="ここに質問を入力">
+        <button onclick="sendMessage()">送信</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+      const chat = document.getElementById("chat");
+      
+      // ユーザーのメッセージを表示
+      const userMsg = document.createElement("div");
+      userMsg.className = "message user";
+      userMsg.textContent = "あなた: " + text;
+      chat.appendChild(userMsg);
+      
+      // デモ用AIレスポンス
+      const aiMsg = document.createElement("div");
+      aiMsg.className = "message ai";
+      aiMsg.textContent = "AI: （" + document.getElementById("apiDropdown").value + " で応答中） ご質問ありがとうございます！";
+      chat.appendChild(aiMsg);
+      
+      input.value = "";
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
