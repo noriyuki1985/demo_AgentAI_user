@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ログイン - AIエージェントデモ</title>
+  <title>ログイン - エージェントAIプラットフォーム</title>
   <style>
     body {
       font-family: sans-serif;
@@ -37,8 +37,8 @@
 <body>
   <h1>ログイン</h1>
   <form id="loginForm">
-    <label>ユーザーネーム</label>
-    <input type="text" id="username" placeholder="ユーザーネームを入力" required>
+    <label>メールアドレス</label>
+    <input type="email" id="email" placeholder="メールアドレスを入力" required>
     
     <label>パスワード</label>
     <input type="password" id="password" placeholder="パスワードを入力" required>
@@ -47,19 +47,37 @@
   </form>
   
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       
-      if (username === "user" && password === "a") {
-        window.location.href = "dashboard_user.html";
-      } else if (username === "admin" && password === "a") {
-        window.location.href = "dashboard_admin.html";
-      } else if (username === "owner" && password === "a") {
-        window.location.href = "dashboard_owner.html";
-      } else {
-        alert("ユーザーネームまたはパスワードが正しくありません。");
+      try {
+        // Apps Script のログイン API の URL（実際の URL に置き換えてください）
+        const scriptUrl = "https://script.google.com/macros/s/AKfycb.../exec";
+        const loginUrl = scriptUrl + "?type=login&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
+        
+        const res = await fetch(loginUrl);
+        const data = await res.json();
+        
+        if (data.success) {
+          alert("ログイン成功: " + data.userName + " さん、ようこそ！");
+          // role に応じたダッシュボードへ遷移
+          if (data.role === "user") {
+            window.location.href = "dashboard_user.html";
+          } else if (data.role === "admin") {
+            window.location.href = "dashboard_admin.html";
+          } else if (data.role === "owner") {
+            window.location.href = "dashboard_owner.html";
+          } else {
+            alert("不明な権限です");
+          }
+        } else {
+          alert("ログイン失敗: " + data.message);
+        }
+      } catch (error) {
+        console.error("ログイン処理でエラー:", error);
+        alert("ログイン処理に失敗しました。");
       }
     });
   </script>
