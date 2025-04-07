@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>AIエージェントプラットフォーム - デモ画面</title>
+  <style>
+    /* 全体リセット */
+    * {
+      margin: 0; 
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ヘッダー */
+    header {
+      height: 50px;
+      background: #f5f5f5;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+    header .title {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    header button {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+    }
+
+    /* コンテナ領域 */
+    #container {
+      flex: 1;
+      display: flex;
+      height: calc(100vh - 50px);
+    }
+
+    /* 左カラム（過去のエージェント履歴） */
+    aside {
+      width: 240px;
+      border-right: 1px solid #ccc;
+      background: #fafafa;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    aside h2 {
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    .history-item {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .history-item .date {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* メインコンテンツ */
+    main {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    .agent-list-title {
+      font-size: 16px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    .agent-card {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .agent-card .subtitle {
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header>
+    <div class="title">ChatGPT 4.5</div>
+    <button onclick="goToMyPage()">マイページ</button>
+  </header>
+
+  <!-- メインコンテナ -->
+  <div id="container">
+    <!-- 左カラム：過去のエージェント履歴 -->
+    <aside>
+      <h2>過去のエージェント履歴</h2>
+      <!-- 履歴アイテム（例） -->
+      <div class="history-item">
+        <div>経理</div>
+        <div class="date">2023/04/05</div>
+      </div>
+      <div class="history-item">
+        <div>マーケティング</div>
+        <div class="date">2023/04/06</div>
+      </div>
+      <div class="history-item">
+        <div>営業</div>
+        <div class="date">2023/04/07</div>
+      </div>
+    </aside>
+
+    <!-- 中央エリア：エージェント一覧 or カテゴリ選択 -->
+    <main>
+      <div class="agent-list-title">エージェント一覧</div>
+      <!-- エージェントカード（例） -->
+      <div class="agent-card">
+        <div>経理</div>
+        <div class="subtitle">ヒアリング項目の確認</div>
+      </div>
+      <div class="agent-card">
+        <div>マーケティング</div>
+        <div class="subtitle">プロモーション施策の提案</div>
+      </div>
+      <div class="agent-card">
+        <div>営業</div>
+        <div class="subtitle">営業トークスクリプト作成</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function goToMyPage() {
+      alert("マイページへ移動します（デモ）");
+      // 実際には location.href = "mypage.html" など
+    }
+  </script>
+</body>
+</html>
