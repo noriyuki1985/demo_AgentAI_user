@@ -93,7 +93,7 @@
       cursor: pointer;
     }
 
-    /* 中央：チャットUI */
+    /* 中央：チャット欄 */
     #main {
       flex: 1;
       display: flex;
@@ -143,16 +143,14 @@
       </select>
     </div>
 
-    <!-- 右側: マイページメニュー（ポップアップ） -->
+    <!-- 右側: マイページボタン & ドロップダウン -->
     <div class="menu-container">
-      <button class="menu-button" onclick="toggleMenu()">▼</button>
+      <!-- ボタンを "▼" から "マイページ" に変更 -->
+      <button class="menu-button" onclick="toggleMenu()">マイページ</button>
       <div id="myMenu" class="dropdown-menu">
-        <div class="menu-item">マイGPT</div>
-        <div class="menu-item">ChatGPTをカスタマイズする</div>
-        <div class="menu-item">設定</div>
-        <div class="menu-item">プランをアップグレードする</div>
-        <div class="menu-item">ChatGPTの検索拡張機能を取得する</div>
-        <div class="menu-item" onclick="logout()">ログアウト</div>
+        <div class="menu-item">ユーザー情報</div>
+        <div class="menu-item">従量課金について</div>
+        <div class="menu-item">サブスクリプションの停止について</div>
       </div>
     </div>
   </header>
@@ -179,44 +177,41 @@
   </div>
 
   <script>
-    // メニューの表示/非表示切替
+    // メニューの表示/非表示切り替え
     function toggleMenu() {
       const menu = document.getElementById("myMenu");
       menu.classList.toggle("show");
     }
-    // 画面外クリックでメニューを閉じる
+
+    // メニュー外をクリックしたらメニューを閉じる
     window.onclick = function(event) {
       const menu = document.getElementById("myMenu");
       if (!event.target.matches('.menu-button') && !event.target.closest('.dropdown-menu')) {
         if (menu.classList.contains('show')) {
           menu.classList.remove('show');
-        }https://github.com/noriyuki1985/demo_agentAI_user/blob/main/dashboard.html
+        }
       }
     }
-    // ログアウト（デモ用）
-    function logout() {
-      alert("ログアウトしました（デモ）");
-      // 実際には login.html などへ遷移
-    }
-    // チャット送信処理
+
+    // チャット送信
     function sendMessage() {
       const input = document.getElementById("userInput");
       const text = input.value.trim();
       if (!text) return;
       const chat = document.getElementById("chat");
-      
-      // ユーザーのメッセージ表示
+
+      // ユーザーのメッセージを表示
       const userMsg = document.createElement("div");
       userMsg.className = "message user";
       userMsg.textContent = "あなた: " + text;
       chat.appendChild(userMsg);
-      
-      // デモ用の AI レスポンス
+
+      // デモ用AIレスポンス
       const aiMsg = document.createElement("div");
       aiMsg.className = "message ai";
       aiMsg.textContent = "AI (" + document.getElementById("apiDropdown").value + "): ご質問ありがとうございます！";
       chat.appendChild(aiMsg);
-      
+
       input.value = "";
       chat.scrollTop = chat.scrollHeight;
     }
