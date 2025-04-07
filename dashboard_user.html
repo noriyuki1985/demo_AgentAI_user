@@ -106,22 +106,7 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    /* 新規カテゴリ作成ボタン */
-    #newCategoryHeader {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    #newCategoryButton {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    /* モーダル（背景） */
+    /* モーダル：カテゴリ詳細表示（エージェント一覧） */
     .modal {
       position: fixed;
       top: 0;
@@ -132,7 +117,6 @@
       background: rgba(0, 0, 0, 0.5);
       z-index: 1000;
     }
-    /* モーダルのコンテンツ */
     .modal .modal-content {
       position: absolute;
       top: 50%;
@@ -146,17 +130,11 @@
     .modal .modal-content h3 {
       margin-top: 0;
     }
-    .modal .modal-content input[type="text"] {
-      padding: 8px;
-      font-size: 14px;
-      width: 200px;
-      margin-right: 10px;
-    }
     .modal .modal-content button {
       padding: 8px 16px;
       font-size: 14px;
       cursor: pointer;
-      margin-right: 5px;
+      margin-top: 10px;
     }
     /* 大きな四角のカテゴリボタン */
     .category-grid {
@@ -233,31 +211,6 @@
     <!-- 中央：カテゴリ選択エリア -->
     <div id="main">
       <div id="categoryContainer">
-        <!-- 新規カテゴリ作成ボタン -->
-        <div id="newCategoryHeader">
-          <button id="newCategoryButton" onclick="openNewCategoryModal()">＋カテゴリの新規作成</button>
-        </div>
-        <!-- モーダル：新規カテゴリ作成 -->
-        <div id="newCategoryModal" class="modal">
-          <div class="modal-content">
-            <h3>新規カテゴリ作成</h3>
-            <input type="text" id="newCategoryName" placeholder="カテゴリ名を入力">
-            <br><br>
-            <button onclick="submitNewCategory()">作成</button>
-            <button onclick="closeNewCategoryModal()">キャンセル</button>
-          </div>
-        </div>
-        <!-- モーダル：カテゴリ詳細表示（エージェント一覧） -->
-        <div id="categoryDetailModal" class="modal">
-          <div class="modal-content">
-            <h3 id="categoryDetailTitle">カテゴリ詳細</h3>
-            <div id="agentList">
-              <!-- エージェントの名前がここに表示されます -->
-            </div>
-            <br>
-            <button onclick="closeCategoryDetailModal()">閉じる</button>
-          </div>
-        </div>
         <!-- 大きな四角のカテゴリボタン -->
         <div class="category-grid">
           <!-- APIから取得したカテゴリボタンが動的に追加されます -->
@@ -270,6 +223,18 @@
           <div class="list-item" onclick="alert('マーケティング：SEOコンテンツの作成を選択しました')">マーケティング：SEOコンテンツの作成</div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- モーダル：カテゴリ詳細表示（エージェント一覧） -->
+  <div id="categoryDetailModal" class="modal">
+    <div class="modal-content">
+      <h3 id="categoryDetailTitle">カテゴリ詳細</h3>
+      <div id="agentList">
+        <!-- エージェントの名前がここに表示されます -->
+      </div>
+      <br>
+      <button onclick="closeCategoryDetailModal()">閉じる</button>
     </div>
   </div>
 
@@ -287,13 +252,6 @@
           menu.classList.remove("show");
         }
       }
-    }
-    // 新規カテゴリ作成モーダルの表示/非表示
-    function openNewCategoryModal() {
-      document.getElementById("newCategoryModal").style.display = "block";
-    }
-    function closeNewCategoryModal() {
-      document.getElementById("newCategoryModal").style.display = "none";
     }
     // カテゴリ詳細モーダル（エージェント一覧）の表示/非表示
     function openCategoryDetailModal(category) {
@@ -325,37 +283,7 @@
     }
     // カテゴリボタンのクリック処理
     function selectCategory(category) {
-      // ここでは例として「営業」カテゴリの場合に詳細モーダルを表示
       openCategoryDetailModal(category);
-    }
-    // 新規カテゴリ作成の送信処理（POST用URLを使用）
-    async function submitNewCategory() {
-      const input = document.getElementById("newCategoryName");
-      const categoryName = input.value.trim();
-      if (!categoryName) {
-        alert("カテゴリ名を入力してください。");
-        return;
-      }
-      try {
-        const params = new URLSearchParams();
-        params.append('category', categoryName);
-        // 新しい doPost のURLを使用（例としてURLを記載）
-        const res = await fetch('https://script.google.com/macros/s/AKfycbww8e5-Q1jegaWMlvl76iHAU_aFbl288G_K2bgMFqAG17XC7MkDQRifqX8BfETbmR9T/exec', {
-          method: 'POST',
-          body: params
-        });
-        const result = await res.json();
-        if (result.result === "success") {
-          alert("カテゴリを追加しました！");
-          input.value = "";
-          closeNewCategoryModal();
-          fetchCategories(); // カテゴリ一覧を再取得
-        } else {
-          alert("エラーが発生しました: " + result.message);
-        }
-      } catch (error) {
-        console.error('カテゴリ追加に失敗しました:', error);
-      }
     }
     // カテゴリ一覧を取得して表示する関数（GET用URLを使用）
     async function fetchCategories() {
