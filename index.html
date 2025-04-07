@@ -53,8 +53,8 @@
       const password = document.getElementById("password").value.trim();
       
       try {
-        // Apps Script のログイン API の URL（実際の URL に置き換えてください）
-        const scriptUrl = "https://script.google.com/macros/s/AKfycb.../exec";
+        // Apps Script のログイン API の URL を設定
+        const scriptUrl = "https://script.google.com/macros/s/AKfycbyTpjISP_ED0hDFucZbFR6fOuFtiAza9kSeG72YC5l4YBsX-MRTBBs0uFVj7ljdl-SV/exec";
         const loginUrl = scriptUrl + "?type=login&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
         
         const res = await fetch(loginUrl);
