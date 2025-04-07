@@ -93,45 +93,54 @@
           </tr>
         </thead>
         <tbody id="userTableBody">
-          <!-- ここに全顧客情報が表示されます -->
+          <!-- Apps Scriptから取得したデータで行を動的に生成 -->
         </tbody>
       </table>
     </div>
   </div>
   
   <script>
-    async function fetchAllUsers() {
+    async function fetchCustomerData() {
       try {
-        // 全顧客情報取得用のURL（?type=getAll を付与）
+        // 「getAll」タイプで全データを取得するURL
         const url = "https://script.google.com/macros/s/AKfycbwO_PVN1y6ZPrtV21YQK5dD1GR5nLK2FSAUjzO74noyHDP-JvETD45hd3tWZ7W6r3jC/exec?type=getAll";
-        const res = await fetch(url);
-        const users = await res.json();
-        
+        const response = await fetch(url);
+        const data = await response.json();
+        // data は顧客情報のオブジェクトの配列
         const tbody = document.getElementById("userTableBody");
         tbody.innerHTML = "";
-        
-        users.forEach(user => {
-          // ここでは、Apps Script から返される JSON のプロパティ名を以下のように仮定しています。
-          // customerId, companyName, userName, role, category, agent, lastLogin
+        data.forEach(record => {
+          // 各カラムの値を、該当プロパティがない場合は空文字列にする
+          const customerId = record.customerId || "";
+          const companyName = record.companyName || "";
+          const userName = record.userName || "";
+          const role = record.role || "";
+          const category = record.category || "";
+          const agent = record.agent || "";
+          const lastLogin = record.lastLogin || "";
+          
+          // 詳細リンクは customer_detail.html に customerId をクエリパラメータとして渡す例
+          const detailLink = `<a href="customer_detail.html?id=${customerId}">詳細</a>`;
+          
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${user.customerId || ""}</td>
-            <td>${user.companyName || ""}</td>
-            <td>${user.userName || ""}</td>
-            <td>${user.role || ""}</td>
-            <td>${user.category || ""}</td>
-            <td>${user.agent || ""}</td>
-            <td>${user.lastLogin || ""}</td>
-            <td><a href="customer_detail.html?id=${user.customerId || ""}">詳細</a></td>
+            <td>${customerId}</td>
+            <td>${companyName}</td>
+            <td>${userName}</td>
+            <td>${role}</td>
+            <td>${category}</td>
+            <td>${agent}</td>
+            <td>${lastLogin}</td>
+            <td>${detailLink}</td>
           `;
           tbody.appendChild(tr);
         });
       } catch (error) {
-        console.error("ユーザーデータの取得に失敗しました:", error);
+        console.error("顧客データの取得に失敗しました:", error);
       }
     }
     
-    window.onload = fetchAllUsers;
+    window.onload = fetchCustomerData;
   </script>
 </body>
 </html>
