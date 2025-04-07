@@ -203,9 +203,7 @@
         </div>
         <!-- 大きな四角のカテゴリボタン -->
         <div class="category-grid">
-          <div class="category-btn" onclick="selectCategory('営業')">営業</div>
-          <div class="category-btn" onclick="selectCategory('マーケティング')">マーケティング</div>
-          <div class="category-btn" onclick="selectCategory('経理')">経理</div>
+          <!-- ここにAPIから取得したカテゴリボタンが動的に追加されます -->
         </div>
         <!-- リスト表示の詳細カテゴリ -->
         <div class="category-list">
@@ -236,12 +234,34 @@
     // カテゴリボタンのクリック処理
     function selectCategory(category) {
       alert("「" + category + "」を選択しました。ここから詳細画面に遷移します（デモ）。");
-      // ここで実際の遷移処理を実装します
     }
     // 新規カテゴリ作成ボタンのクリック処理
     function createNewCategory() {
       alert("新規カテゴリ作成機能（デモ）：ここで新しいカテゴリを作成するフォームを表示します。");
     }
+
+    // カテゴリ一覧を取得して表示する関数（fetchCategoriesと命名）
+    async function fetchCategories() {
+      try {
+        const res = await fetch('https://script.google.com/macros/s/AKfycbyX62whHRIVJ9ufxiHkd5GeLwbW587dD706CNfDFvTYzibXiMLxoNbm9WS_by-ToJ7J/exec');
+        const categories = await res.json();
+        const grid = document.querySelector('.category-grid');
+        grid.innerHTML = ''; // 既存の内容をクリア
+
+        categories.forEach(cat => {
+          const div = document.createElement('div');
+          div.className = 'category-btn';
+          div.textContent = cat.name;
+          div.onclick = () => selectCategory(cat.name);
+          grid.appendChild(div);
+        });
+      } catch (error) {
+        console.error('カテゴリの取得に失敗しました:', error);
+      }
+    }
+
+    // ページ読み込み時にカテゴリ一覧を表示
+    window.onload = fetchCategories;
   </script>
 </body>
 </html>
