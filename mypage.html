@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>マイページ - AIエージェントプラットフォーム</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    h1 { text-align: center; }
+    section {
+      margin-bottom: 30px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>マイページ</h1>
+  
+  <!-- 付与されている権限 -->
+  <section>
+    <h2>付与されている権限</h2>
+    <p>権限: 管理者 / 編集者</p>
+  </section>
+  
+  <!-- アイコン画像のアップロード／設定 -->
+  <section>
+    <h2>アイコン画像のアップロード／設定</h2>
+    <input type="file" id="iconUpload" accept="image/*">
+    <div id="iconPreview" style="margin-top:10px;"></div>
+  </section>
+  
+  <!-- 会社情報 -->
+  <section>
+    <h2>会社情報</h2>
+    <label>会社名</label>
+    <input type="text" id="companyName" placeholder="例：株式会社サンプル">
+    <label>部署</label>
+    <input type="text" id="department" placeholder="例：マーケティング部">
+  </section>
+  
+  <!-- ユーザー名 -->
+  <section>
+    <h2>ユーザー名</h2>
+    <input type="text" id="username" placeholder="ユーザー名">
+  </section>
+  
+  <!-- パスワードの変更 -->
+  <section>
+    <h2>パスワードの変更</h2>
+    <label>現在のパスワード</label>
+    <input type="password" id="currentPassword">
+    <label>新しいパスワード</label>
+    <input type="password" id="newPassword">
+    <button onclick="changePassword()">変更する</button>
+  </section>
+  
+  <!-- 金額 -->
+  <section>
+    <h2>金額</h2>
+    <p>現在の残高: <span id="balance">10000</span> 円</p>
+  </section>
+  
+  <!-- OpenAIのAPIカード情報の登録 -->
+  <section>
+    <h2>OpenAIのAPIカード情報の登録</h2>
+    <label>カード番号</label>
+    <input type="text" id="cardNumber" placeholder="xxxx-xxxx-xxxx-xxxx">
+    <label>有効期限</label>
+    <input type="text" id="cardExpiry" placeholder="MM/YY">
+    <label>CVC</label>
+    <input type="text" id="cardCVC" placeholder="3桁">
+    <button onclick="registerCard()">登録する</button>
+  </section>
+  
+  <script>
+    // アイコン画像のプレビュー表示
+    document.getElementById('iconUpload').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('iconPreview').innerHTML = "<img src='" + e.target.result + "' style='max-width:150px; border:1px solid #ccc;'>";
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function changePassword() {
+      const current = document.getElementById('currentPassword').value;
+      const newPass = document.getElementById('newPassword').value;
+      // デモでは必ず成功とする
+      alert("パスワードが変更されました。");
+      document.getElementById('currentPassword').value = "";
+      document.getElementById('newPassword').value = "";
+    }
+
+    function registerCard() {
+      const number = document.getElementById('cardNumber').value;
+      const expiry = document.getElementById('cardExpiry').value;
+      const cvc = document.getElementById('cardCVC').value;
+      // デモなので、入力内容をそのままアラート表示
+      alert("カード情報が登録されました。\n番号: " + number + "\n有効期限: " + expiry);
+    }
+  </script>
+</body>
+</html>
