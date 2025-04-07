@@ -107,7 +107,7 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    /* 新規カテゴリ作成ボタン */
+    /* 新規カテゴリ作成エリア */
     #newCategoryHeader {
       display: flex;
       align-items: center;
@@ -120,6 +120,22 @@
       padding: 10px 16px;
       font-size: 16px;
       border-radius: 4px;
+      cursor: pointer;
+    }
+    /* 新規カテゴリ作成フォーム（初期は非表示） */
+    #newCategoryForm {
+      margin-top: 10px;
+      display: none;
+    }
+    #newCategoryForm input[type="text"] {
+      padding: 8px;
+      font-size: 14px;
+      width: 200px;
+      margin-right: 10px;
+    }
+    #newCategoryForm button {
+      padding: 8px 16px;
+      font-size: 14px;
       cursor: pointer;
     }
     /* 大きな四角のカテゴリボタン */
@@ -199,13 +215,19 @@
       <div id="categoryContainer">
         <!-- 新規カテゴリ作成ボタン -->
         <div id="newCategoryHeader">
-          <button id="newCategoryButton" onclick="createNewCategory()">＋カテゴリの新規作成</button>
+          <button id="newCategoryButton" onclick="toggleNewCategoryForm()">＋カテゴリの新規作成</button>
+        </div>
+        <!-- 新規カテゴリ作成フォーム -->
+        <div id="newCategoryForm">
+          <input type="text" id="newCategoryName" placeholder="カテゴリ名を入力">
+          <button onclick="submitNewCategory()">作成</button>
+          <button onclick="toggleNewCategoryForm()">キャンセル</button>
         </div>
         <!-- 大きな四角のカテゴリボタン -->
         <div class="category-grid">
           <!-- ここにAPIから取得したカテゴリボタンが動的に追加されます -->
         </div>
-        <!-- リスト表示の詳細カテゴリ -->
+        <!-- リスト表示のカテゴリ詳細 -->
         <div class="category-list">
           <div class="list-title">最近使ったAIエージェント</div>
           <div class="list-item" onclick="alert('営業：ヒアリングを選択しました')">営業：ヒアリング</div>
@@ -235,11 +257,41 @@
     function selectCategory(category) {
       alert("「" + category + "」を選択しました。ここから詳細画面に遷移します（デモ）。");
     }
-    // 新規カテゴリ作成ボタンのクリック処理
-    function createNewCategory() {
-      alert("新規カテゴリ作成機能（デモ）：ここで新しいカテゴリを作成するフォームを表示します。");
+    // 新規カテゴリ作成フォームの表示/非表示切替
+    function toggleNewCategoryForm() {
+      const form = document.getElementById("newCategoryForm");
+      form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
     }
-    // カテゴリ一覧を取得して表示する関数（fetchCategoriesと命名）
+    // 新規カテゴリ作成の送信処理
+    async function submitNewCategory() {
+      const input = document.getElementById("newCategoryName");
+      const categoryName = input.value.trim();
+      if (!categoryName) {
+        alert("カテゴリ名を入力してください。");
+        return;
+      }
+      
+      try {
+        const params = new URLSearchParams();
+        params.append('category', categoryName);
+        const res = await fetch('https://script.google.com/macros/s/AKfycbzbfmrWNod8FiMOaUxlvKksu7jnTt903I4RPGXOeiCMaNiBnE533q6W0BV8WT_egiM/exec', {
+          method: 'POST',
+          body: params
+        });
+        const result = await res.json();
+        if (result.result === "success") {
+          alert("カテゴリを追加しました！");
+          input.value = "";
+          toggleNewCategoryForm();
+          fetchCategories(); // 新しいカテゴリ一覧を再取得
+        } else {
+          alert("エラーが発生しました: " + result.message);
+        }
+      } catch (error) {
+        console.error('カテゴリ追加に失敗しました:', error);
+      }
+    }
+    // カテゴリ一覧を取得して表示する関数
     async function fetchCategories() {
       try {
         const res = await fetch('https://script.google.com/macros/s/AKfycbzbfmrWNod8FiMOaUxlvKksu7jnTt903I4RPGXOeiCMaNiBnE533q6W0BV8WT_egiM/exec');
