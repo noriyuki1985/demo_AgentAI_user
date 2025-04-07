@@ -25,6 +25,12 @@
     header .api-select {
       font-size: 16px;
     }
+    /* ユーザー名表示 */
+    header .user-name {
+      font-size: 16px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
     /* マイページメニュー */
     .menu-container {
       position: relative;
@@ -70,7 +76,7 @@
       flex: 1;
       display: flex;
     }
-    /* 左側：チャット履歴 */
+    /* 左側：チャット履歴（固定） */
     #sidebar {
       width: 250px;
       background: #fafafa;
@@ -101,7 +107,7 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    /* 上部の新規カテゴリ作成ボタン */
+    /* 新規カテゴリ作成ボタン */
     #newCategoryHeader {
       display: flex;
       align-items: center;
@@ -116,7 +122,7 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    /* 四角ボタン（カテゴリグリッド） */
+    /* 大きな四角のカテゴリボタン */
     .category-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -137,9 +143,14 @@
     .category-btn:hover {
       background: #e6f0ff;
     }
-    /* リスト表示のカテゴリ詳細ボタン */
+    /* リスト表示のカテゴリ詳細 */
     .category-list {
       margin-top: 20px;
+    }
+    .list-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
     .list-item {
       background: #fff;
@@ -148,9 +159,7 @@
       border-radius: 4px;
       font-size: 16px;
       cursor: pointer;
-    }
-    .list-item + .list-item {
-      margin-top: 10px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -165,6 +174,7 @@
         <option value="chatgpt-4.5">ChatGPT-4.5</option>
       </select>
     </div>
+    <div class="user-name">一花徳行</div>
     <div class="menu-container">
       <button class="menu-button" onclick="toggleMenu()">マイページ</button>
       <div id="myMenu" class="dropdown-menu">
@@ -197,8 +207,9 @@
           <div class="category-btn" onclick="selectCategory('マーケティング')">マーケティング</div>
           <div class="category-btn" onclick="selectCategory('経理')">経理</div>
         </div>
-        <!-- リスト表示の詳細カテゴリボタン -->
+        <!-- リスト表示の詳細カテゴリ -->
         <div class="category-list">
+          <div class="list-title">最近使ったAIエージェント</div>
           <div class="list-item" onclick="alert('営業：ヒアリングを選択しました')">営業：ヒアリング</div>
           <div class="list-item" onclick="alert('経理：KPIの取得を選択しました')">経理：KPIの取得</div>
           <div class="list-item" onclick="alert('マーケティング：SEOコンテンツの作成を選択しました')">マーケティング：SEOコンテンツの作成</div>
@@ -213,6 +224,7 @@
       const menu = document.getElementById("myMenu");
       menu.classList.toggle("show");
     }
+    // メニュー外をクリックしたらメニューを閉じる
     window.onclick = function(event) {
       const menu = document.getElementById("myMenu");
       if (!event.target.matches('.menu-button') && !event.target.closest('.dropdown-menu')) {
@@ -221,13 +233,11 @@
         }
       }
     }
-
     // カテゴリボタンのクリック処理
     function selectCategory(category) {
       alert("「" + category + "」を選択しました。ここから詳細画面に遷移します（デモ）。");
-      // 実際はチャット画面に遷移するなどの処理を実装
+      // ここで実際の遷移処理を実装します
     }
-
     // 新規カテゴリ作成ボタンのクリック処理
     function createNewCategory() {
       alert("新規カテゴリ作成機能（デモ）：ここで新しいカテゴリを作成するフォームを表示します。");
