@@ -25,7 +25,6 @@
     header .api-select {
       font-size: 16px;
     }
-
     /* マイページメニュー */
     .menu-container {
       position: relative;
@@ -66,13 +65,12 @@
     .menu-item:hover {
       background: #f0f0f0;
     }
-
     /* メインコンテナ */
     #container {
       flex: 1;
       display: flex;
     }
-    /* 左側：チャット履歴（固定のまま） */
+    /* 左側：チャット履歴 */
     #sidebar {
       width: 250px;
       background: #fafafa;
@@ -92,20 +90,38 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
     /* 中央：カテゴリ選択エリア */
     #main {
       flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 20px;
       background: #eee;
+      overflow-y: auto;
     }
+    #categoryContainer {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    /* 上部の新規カテゴリ作成ボタン */
+    #newCategoryHeader {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    #newCategoryButton {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    /* 四角ボタン（カテゴリグリッド） */
     .category-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 20px;
-      width: 80%;
+      margin-bottom: 30px;
     }
     .category-btn {
       background: #fff;
@@ -120,6 +136,21 @@
     }
     .category-btn:hover {
       background: #e6f0ff;
+    }
+    /* リスト表示のカテゴリ詳細ボタン */
+    .category-list {
+      margin-top: 20px;
+    }
+    .list-item {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .list-item + .list-item {
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -146,19 +177,32 @@
 
   <!-- メインコンテナ -->
   <div id="container">
-    <!-- 左側：チャット履歴（固定） -->
+    <!-- 左側：チャット履歴 -->
     <div id="sidebar">
       <h2>チャット履歴</h2>
       <div class="chat-item">💬 サンプルチャット 2023-04-07</div>
       <div class="chat-item">💬 サンプルチャット 2023-04-06</div>
     </div>
 
-    <!-- 中央：カテゴリ選択画面 -->
+    <!-- 中央：カテゴリ選択エリア -->
     <div id="main">
-      <div class="category-grid">
-        <div class="category-btn" onclick="selectCategory('営業')">営業</div>
-        <div class="category-btn" onclick="selectCategory('マーケティング')">マーケティング</div>
-        <div class="category-btn" onclick="selectCategory('経理')">経理</div>
+      <div id="categoryContainer">
+        <!-- 新規カテゴリ作成ボタン -->
+        <div id="newCategoryHeader">
+          <button id="newCategoryButton" onclick="createNewCategory()">＋カテゴリの新規作成</button>
+        </div>
+        <!-- 大きな四角のカテゴリボタン -->
+        <div class="category-grid">
+          <div class="category-btn" onclick="selectCategory('営業')">営業</div>
+          <div class="category-btn" onclick="selectCategory('マーケティング')">マーケティング</div>
+          <div class="category-btn" onclick="selectCategory('経理')">経理</div>
+        </div>
+        <!-- リスト表示の詳細カテゴリボタン -->
+        <div class="category-list">
+          <div class="list-item" onclick="alert('営業：ヒアリングを選択しました')">営業：ヒアリング</div>
+          <div class="list-item" onclick="alert('経理：KPIの取得を選択しました')">経理：KPIの取得</div>
+          <div class="list-item" onclick="alert('マーケティング：SEOコンテンツの作成を選択しました')">マーケティング：SEOコンテンツの作成</div>
+        </div>
       </div>
     </div>
   </div>
@@ -178,11 +222,15 @@
       }
     }
 
-    // カテゴリボタンがクリックされたときの処理（デモ用）
+    // カテゴリボタンのクリック処理
     function selectCategory(category) {
-      alert("「" + category + "」を選択しました。ここからチャット画面に遷移します。（デモ）");
-      // 実際には、選択したカテゴリに応じたチャットUIへ遷移する処理を追加します
-      // 例: window.location.href = "chat.html?category=" + encodeURIComponent(category);
+      alert("「" + category + "」を選択しました。ここから詳細画面に遷移します（デモ）。");
+      // 実際はチャット画面に遷移するなどの処理を実装
+    }
+
+    // 新規カテゴリ作成ボタンのクリック処理
+    function createNewCategory() {
+      alert("新規カテゴリ作成機能（デモ）：ここで新しいカテゴリを作成するフォームを表示します。");
     }
   </script>
 </body>
