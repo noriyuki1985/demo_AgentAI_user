@@ -262,7 +262,7 @@
       const form = document.getElementById("newCategoryForm");
       form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
     }
-    // 新規カテゴリ作成の送信処理
+    // 新規カテゴリ作成の送信処理（POST用URLに変更）
     async function submitNewCategory() {
       const input = document.getElementById("newCategoryName");
       const categoryName = input.value.trim();
@@ -274,7 +274,8 @@
       try {
         const params = new URLSearchParams();
         params.append('category', categoryName);
-        const res = await fetch('https://script.google.com/macros/s/AKfycbzbfmrWNod8FiMOaUxlvKksu7jnTt903I4RPGXOeiCMaNiBnE533q6W0BV8WT_egiM/exec', {
+        // 新しい doPost のURLを使用
+        const res = await fetch('https://script.google.com/macros/s/AKfycbww8e5-Q1jegaWMlvl76iHAU_aFbl288G_K2bgMFqAG17XC7MkDQRifqX8BfETbmR9T/exec', {
           method: 'POST',
           body: params
         });
@@ -291,7 +292,7 @@
         console.error('カテゴリ追加に失敗しました:', error);
       }
     }
-    // カテゴリ一覧を取得して表示する関数
+    // カテゴリ一覧を取得して表示する関数（GET用URLは従来のものを使用）
     async function fetchCategories() {
       try {
         const res = await fetch('https://script.google.com/macros/s/AKfycbzbfmrWNod8FiMOaUxlvKksu7jnTt903I4RPGXOeiCMaNiBnE533q6W0BV8WT_egiM/exec');
