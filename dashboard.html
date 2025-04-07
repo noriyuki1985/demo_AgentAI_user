@@ -122,7 +122,7 @@
       cursor: pointer;
     }
     /* モーダル（背景） */
-    #newCategoryModal {
+    .modal {
       position: fixed;
       top: 0;
       left: 0;
@@ -133,7 +133,7 @@
       z-index: 1000;
     }
     /* モーダルのコンテンツ */
-    #newCategoryModal .modal-content {
+    .modal .modal-content {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -143,13 +143,16 @@
       border-radius: 8px;
       min-width: 300px;
     }
-    #newCategoryModal .modal-content input[type="text"] {
+    .modal .modal-content h3 {
+      margin-top: 0;
+    }
+    .modal .modal-content input[type="text"] {
       padding: 8px;
       font-size: 14px;
       width: 200px;
       margin-right: 10px;
     }
-    #newCategoryModal .modal-content button {
+    .modal .modal-content button {
       padding: 8px 16px;
       font-size: 14px;
       cursor: pointer;
@@ -234,8 +237,8 @@
         <div id="newCategoryHeader">
           <button id="newCategoryButton" onclick="openNewCategoryModal()">＋カテゴリの新規作成</button>
         </div>
-        <!-- モーダルポップアップ -->
-        <div id="newCategoryModal">
+        <!-- モーダル：新規カテゴリ作成 -->
+        <div id="newCategoryModal" class="modal">
           <div class="modal-content">
             <h3>新規カテゴリ作成</h3>
             <input type="text" id="newCategoryName" placeholder="カテゴリ名を入力">
@@ -244,11 +247,22 @@
             <button onclick="closeNewCategoryModal()">キャンセル</button>
           </div>
         </div>
+        <!-- モーダル：カテゴリ詳細表示（エージェント一覧） -->
+        <div id="categoryDetailModal" class="modal">
+          <div class="modal-content">
+            <h3 id="categoryDetailTitle">カテゴリ詳細</h3>
+            <div id="agentList">
+              <!-- エージェントの名前がここに表示されます -->
+            </div>
+            <br>
+            <button onclick="closeCategoryDetailModal()">閉じる</button>
+          </div>
+        </div>
         <!-- 大きな四角のカテゴリボタン -->
         <div class="category-grid">
           <!-- APIから取得したカテゴリボタンが動的に追加されます -->
         </div>
-        <!-- リスト表示のカテゴリ詳細 -->
+        <!-- リスト表示のカテゴリ詳細（サンプル） -->
         <div class="category-list">
           <div class="list-title">最近使ったAIエージェント</div>
           <div class="list-item" onclick="alert('営業：ヒアリングを選択しました')">営業：ヒアリング</div>
@@ -274,17 +288,45 @@
         }
       }
     }
-    // カテゴリボタンのクリック処理
-    function selectCategory(category) {
-      alert("「" + category + "」を選択しました。ここから詳細画面に遷移します（デモ）。");
-    }
-    // モーダルを表示する関数
+    // 新規カテゴリ作成モーダルの表示/非表示
     function openNewCategoryModal() {
       document.getElementById("newCategoryModal").style.display = "block";
     }
-    // モーダルを閉じる関数
     function closeNewCategoryModal() {
       document.getElementById("newCategoryModal").style.display = "none";
+    }
+    // カテゴリ詳細モーダル（エージェント一覧）の表示/非表示
+    function openCategoryDetailModal(category) {
+      // サンプルデータ：カテゴリごとにエージェントの名前を定義（今回は営業のみ実装）
+      const agentData = {
+        "営業": ["営業エージェントA", "営業エージェントB", "営業エージェントC"]
+        // 他のカテゴリについては必要に応じて追加
+      };
+      const modalTitle = document.getElementById("categoryDetailTitle");
+      const agentListDiv = document.getElementById("agentList");
+      
+      modalTitle.textContent = category + " カテゴリ詳細";
+      agentListDiv.innerHTML = "";
+      
+      if (agentData[category]) {
+        agentData[category].forEach(agent => {
+          const p = document.createElement("p");
+          p.textContent = agent;
+          agentListDiv.appendChild(p);
+        });
+      } else {
+        agentListDiv.textContent = "該当するエージェントはありません。";
+      }
+      
+      document.getElementById("categoryDetailModal").style.display = "block";
+    }
+    function closeCategoryDetailModal() {
+      document.getElementById("categoryDetailModal").style.display = "none";
+    }
+    // カテゴリボタンのクリック処理
+    function selectCategory(category) {
+      // ここでは例として「営業」カテゴリの場合に詳細モーダルを表示
+      openCategoryDetailModal(category);
     }
     // 新規カテゴリ作成の送信処理（POST用URLを使用）
     async function submitNewCategory() {
@@ -297,7 +339,7 @@
       try {
         const params = new URLSearchParams();
         params.append('category', categoryName);
-        // 新しい doPost のURLを使用
+        // 新しい doPost のURLを使用（例としてURLを記載）
         const res = await fetch('https://script.google.com/macros/s/AKfycbww8e5-Q1jegaWMlvl76iHAU_aFbl288G_K2bgMFqAG17XC7MkDQRifqX8BfETbmR9T/exec', {
           method: 'POST',
           body: params
