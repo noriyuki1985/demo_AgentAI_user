@@ -49,29 +49,28 @@
   <script>
     document.getElementById("loginForm").addEventListener("submit", async function(e) {
       e.preventDefault();
+      
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
       
+      // 特例：メールアドレスが "owner" かつパスワードが "a" の場合
+      if(email.toLowerCase() === "owner" && password === "a") {
+        window.location.href = "dashboard_owner.html";
+        return;
+      }
+      
       try {
-        // Apps Script のログイン API の URL を設定
+        // Apps Script側のログインAPIのURLに、type=login, email, password のパラメータを付加して呼び出す
         const scriptUrl = "https://script.google.com/macros/s/AKfycbyTpjISP_ED0hDFucZbFR6fOuFtiAza9kSeG72YC5l4YBsX-MRTBBs0uFVj7ljdl-SV/exec";
         const loginUrl = scriptUrl + "?type=login&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
         
         const res = await fetch(loginUrl);
         const data = await res.json();
         
-        if (data.success) {
-          alert("ログイン成功: " + data.userName + " さん、ようこそ！");
-          // role に応じたダッシュボードへ遷移
-          if (data.role === "user") {
-            window.location.href = "dashboard_user.html";
-          } else if (data.role === "admin") {
-            window.location.href = "dashboard_admin.html";
-          } else if (data.role === "owner") {
-            window.location.href = "dashboard_owner.html";
-          } else {
-            alert("不明な権限です");
-          }
+        if(data.success) {
+          // 取得したDBの全データを sessionStorage に保存（次のページで利用できるように）
+          sessionStorage.setItem("userData", JSON.stringify(data));
+          window.location.href = "dashboard_user.html";
         } else {
           alert("ログイン失敗: " + data.message);
         }
