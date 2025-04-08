@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Owner Dashboard - エージェントAIプラットフォーム</title>
-  <!-- 共通スタイル -->
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/modal.css">
 </head>
 <body>
   <!-- ヘッダー -->
@@ -28,17 +28,27 @@
             <th>カテゴリ</th>
             <th>エージェント</th>
             <th>直近のログイン時間</th>
-            <th>顧客情報</th>
+            <th>詳細</th>
           </tr>
         </thead>
         <tbody id="userTableBody">
-          <!-- ここにAPIから取得したデータが挿入される -->
+          <!-- JSで動的に行を生成 -->
         </tbody>
       </table>
     </div>
   </div>
   
-  <!-- ページ固有の処理 -->
+  <!-- 詳細モーダル（初期は非表示） -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <span id="modalClose" class="modal-close">&times;</span>
+      <div id="modalBody">
+        <!-- 顧客詳細情報がここに表示されます -->
+      </div>
+    </div>
+  </div>
+  
   <script src="js/dashboard_owner.js"></script>
+  <script src="js/detailModal.js"></script>
 </body>
 </html>
