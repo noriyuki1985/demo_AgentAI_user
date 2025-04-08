@@ -74,6 +74,18 @@
       cursor: pointer;
       margin-left: 5px;
     }
+    /* 権限のリンク風テキストのスタイル */
+    .role-link {
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+      /* ボタン風に見せるため余白やボーダーを追加する場合は以下を有効にできます */
+      padding: 2px 4px;
+      border: 1px solid transparent;
+    }
+    .role-link:hover {
+      border: 1px solid blue;
+    }
   </style>
 </head>
 <body>
@@ -95,8 +107,8 @@
             <th>会社名</th>
             <th>お名前</th>
             <th>権限</th>
-            <th>カテゴリ <button class="plus-btn">＋</button></th>
-            <th>エージェント <button class="plus-btn">＋</button></th>
+            <th>カテゴリ</th>
+            <th>エージェント</th>
             <th>直近のログイン時間</th>
             <th>詳細</th>
           </tr>
@@ -111,7 +123,7 @@
   <script>
     async function fetchCustomerData() {
       try {
-        // データ取得エンドポイントURLに ?type=getData を付与してアクセス
+        // エンドポイントURLに ?type=getData を付与してアクセス
         const url = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhN2H25AGloJkqN67bPwyfBEkJYDEFyDT-iXZdOk5vgfnizbagYygz_Kcj9ta78_LS7JYuiXqJpnn0T5aia8KX4Eu-U9WOHjnYW6RhbyGPzecSzb4nA3_hFJGckd7fYAQEoVHNvdOzBq6Nhmdid2p-2W9m3YYM3l7szFQ2N4RQqRsbOavHdQFA9XHdOQbNk0qfCtA55xRr2F_wSyhaBSViSoTeq7CkL4J0ONZHoKUOU4_EjRbyxQIs5R5iys0jK-xPjXy33eCh3vFxy5swI1XrgN5keCnQIr6gWk6l4Y2kK1DcMA7c&lib=MDZUUTRJxMBEuuaiVotVbVWdJHcgl-QcZ&type=getData";
         const response = await fetch(url);
         const data = await response.json();
@@ -122,7 +134,7 @@
         tbody.innerHTML = "";
         
         data.forEach(record => {
-          // 各プロパティが存在しない場合は空文字列に置き換え
+          // 各プロパティが存在しない場合は空文字列に置換
           const userId      = record.user_id       || "";
           const companyName = record.company_name  || "";
           const userName    = record.user_name     || "";
@@ -131,15 +143,18 @@
           const agent       = record.agents        || "";
           const lastLogin   = record.last_login    || "";
           
-          // 詳細リンク。user_id をクエリパラメータとして渡す例
+          // 詳細リンク（user_id をクエリパラメータとして渡す例）
           const detailLink = `<a href="customer_detail.html?id=${userId}">詳細</a>`;
+          
+          // 役割（権限）の表示部分をリンク風にする
+          const roleDisplay = `<a href="#" class="role-link">${role}</a>`;
           
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${userId}</td>
             <td>${companyName}</td>
             <td>${userName}</td>
-            <td>${role}</td>
+            <td>${roleDisplay}</td>
             <td>${category}</td>
             <td>${agent}</td>
             <td>${lastLogin}</td>
