@@ -1,7 +1,7 @@
 async function fetchCustomerData() {
   try {
     // 新しいエンドポイントURLを使用。type=getData を付与してアクセスする想定です
-    const url = "https://script.google.com/macros/s/AKfycbypkJS54j5xThz0DyAjX9PjWB_UxbVq3FsAw2M7-t1LyQewCAlpBw1JnJdSavHWmfia/exec?type=getData";
+    const url = "https://script.google.com/macros/s/AKfycbyzq_3pNJwBI0FqUD1ctGSjwdBgACgkwjKImxhzMkRRBZ4rMsKs5teScSuTSO_Po1rX/exec?type=getData";
     const response = await fetch(url);
     const data = await response.json();
     
