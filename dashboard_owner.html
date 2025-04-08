@@ -104,7 +104,7 @@
       try {
         // 新しいデータ取得エンドポイントURL（このURLが返すJSONは各レコードに
         // user_id, company_name, user_name, role, last_login, category_name, agent_name を含む）
-        const url = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhN2H25AGloJkqN67bPwyfBEkJYDEFyDT-iXZdOk5vgfnizbagYygz_Kcj9ta78_LS7JYuiXqJpnn0T5aia8KX4Eu-U9WOHjnYW6RhbyGPzecSzb4nA3_hFJGckd7fYAQEoVHNvdOzBq6Nhmdid2p-2W9m3YYM3l7szFQ2N4RQqRsbOavHdQFA9XHdOQbNk0qfCtA55xRr2F_wSyhaBSViSoTeq7CkL4J0ONZHoKUOU4_EjRbyxQIs5R5iys0jK-xPjXy33eCh3vFxy5swI1XrgN5keCnQIr6gWk6l4Y2kK1DcMA7c&lib=MDZUUTRJxMBEuuaiVotVbVWdJHcgl-QcZ";
+        const url = "https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhN2H25AGloJkqN67bPwyfBEkJYDEFyDT-iXZdOk5vgfnizbagYygz_Kcj9ta78_LS7JYuiXqJpnn0T5aia8KX4Eu-U9WOHjnYW6RhbyGPzecSzb4nA3_hFJGckd7fYAQEoVHNvdOzBq6Nhmdid2p-2W9m3YYM3l7szFQ2N4RQqRsbOavHdQFA9XHdOQbNk0qfCtA55xRr2F_wSyhaBSViSoTeq7CkL4J0ONZHoKUOU4_EjRbyxQIs5R5iys0jK-xPjXy33eCh3vFxy5swI1XrgN5keCnQIr6gWk6l4Y2kK1DcMA7c&lib=MDZUUTRJxMBEuuaiVotVbVWdJHcgl-QcZ/exec?type=getData";
         const response = await fetch(url);
         const data = await response.json();
         
