@@ -103,7 +103,7 @@
     async function fetchCustomerData() {
       try {
         // Apps Script のエンドポイントのURL（データ取得用のURL）
-        const url = "https://script.google.com/macros/s/AKfycbypkJS54j5xThz0DyAjX9PjWB_UxbVq3FsAw2M7-t1LyQewCAlpBw1JnJdSavHWmfia/exec";
+        const url = "https://script.google.com/macros/s/AKfycbypkJS54j5xThz0DyAjX9PjWB_UxbVq3FsAw2M7-t1LyQewCAlpBw1JnJdSavHWmfia/exec?type=getData";
         const response = await fetch(url);
         const data = await response.json(); // JSON配列を取得
         
