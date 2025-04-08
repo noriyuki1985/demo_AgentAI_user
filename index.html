@@ -3,36 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>ログイン - エージェントAIプラットフォーム</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 {
-      margin-bottom: 30px;
-    }
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      font-size: 16px;
-      margin-top: 5px;
-    }
-    button {
-      margin-top: 30px;
-      padding: 10px 20px;
-      font-size: 16px;
-      width: 100%;
-      cursor: pointer;
-    }
-  </style>
+  <!-- 共通スタイル -->
+  <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
   <h1>ログイン</h1>
@@ -46,40 +18,7 @@
     <button type="submit">ログイン</button>
   </form>
   
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      
-      // 分岐①：Ownerの場合
-      if (email.toLowerCase() === "owner@owner" && password === "a") {
-        window.location.href = "dashboard_owner.html";
-        return;
-      }
-      
-      // 分岐②：その他の場合
-      try {
-        // Apps Script のログインAPIのURL（demo_AgentAI_DB のシート1からデータを取得する）
-        const scriptUrl = "https://script.google.com/macros/s/AKfycbyTpjISP_ED0hDFucZbFR6fOuFtiAza9kSeG72YC5l4YBsX-MRTBBs0uFVj7ljdl-SV/exec";
-        const loginUrl = scriptUrl + "?type=login&email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(password);
-        
-        const res = await fetch(loginUrl);
-        const data = await res.json();
-        
-        if (data.success) {
-          // 取得した顧客情報の全データを sessionStorage に保存
-          sessionStorage.setItem("userData", JSON.stringify(data));
-          window.location.href = "dashboard_user.html";
-        } else {
-          alert("ログイン失敗: " + data.message);
-        }
-      } catch (error) {
-        console.error("ログイン処理でエラー:", error);
-        alert("ログイン処理に失敗しました。");
-      }
-    });
-  </script>
+  <!-- ページ固有の処理 -->
+  <script src="js/login.js"></script>
 </body>
 </html>
