@@ -1,54 +1,48 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>Owner Dashboard - エージェントAIプラットフォーム</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/modal.css">
-</head>
-<body>
-  <!-- ヘッダー -->
-  <header>
-    <div class="title">Owner Dashboard</div>
-    <div class="user-info">Owner: 一花徳行</div>
-  </header>
-  
-  <!-- メインエリア -->
-  <div id="main">
-    <!-- 顧客一覧パネル -->
-    <div class="owner-panel">
-      <h3>顧客一覧</h3>
-      <table class="owner-table">
-        <thead>
-          <tr>
-            <th>お客様ID</th>
-            <th>会社名</th>
-            <th>お名前</th>
-            <th>権限</th>
-            <th>カテゴリ</th>
-            <th>エージェント</th>
-            <th>直近のログイン時間</th>
-            <th>詳細</th>
-          </tr>
-        </thead>
-        <tbody id="userTableBody">
-          <!-- JSで動的に行を生成 -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-  
-  <!-- 詳細モーダル（初期は非表示） -->
-  <div id="detailModal" class="modal">
-    <div class="modal-content">
-      <span id="modalClose" class="modal-close">&times;</span>
-      <div id="modalBody">
-        <!-- 顧客詳細情報がここに表示されます -->
-      </div>
-    </div>
-  </div>
-  
-  <script src="js/dashboard_owner.js"></script>
-  <script src="js/detailModal.js"></script>
-</body>
-</html>
+async function showDetailModal(userId) {
+  try {
+    // ここも新しいエンドポイントURLを使い、クエリパラメータ type=getUserDetail と user_id を付与
+    const detailUrl = "https://script.google.com/macros/s/AKfycbyzq_3pNJwBI0FqUD1ctGSjwdBgACgkwjKImxhzMkRRBZ4rMsKs5teScSuTSO_Po1rX/exec?type=getUserDetail&user_id=" + encodeURIComponent(userId);
+    const response = await fetch(detailUrl);
+    const detail = await response.json();
+    
+    console.log("取得した詳細:", detail);
+    
+    const modalBody = document.getElementById("modalBody");
+    
+    // 取得したデータをもとに、モーダル内に顧客詳細を生成（以下は一例です）
+    let agentHistoryHtml = "";
+    if (detail.agentHistories && detail.agentHistories.length > 0) {
+      agentHistoryHtml = detail.agentHistories.map(hist => {
+        return `<li>${hist.agent_name} – ${hist.used_at} — ${hist.description}</li>`;
+      }).join("");
+      agentHistoryHtml = `<ul>${agentHistoryHtml}</ul>`;
+    }
+    
+    modalBody.innerHTML = `
+      <h2>顧客詳細</h2>
+      <p><strong>お客様ID:</strong> ${detail.user.user_id}</p>
+      <p><strong>会社名:</strong> ${detail.user.company_name}</p>
+      <p><strong>お名前:</strong> ${detail.user.user_name}</p>
+      <p><strong>権限:</strong> ${detail.user.role}</p>
+      <p><strong>最終ログイン日時:</strong> ${detail.user.last_login}</p>
+      <p><strong>電話番号:</strong> ${detail.user.phone || ""}</p>
+      <p><strong>メールアドレス:</strong> ${detail.user.email || ""}</p>
+      <p><strong>住所:</strong> ${detail.user.address || ""}</p>
+      <p><strong>所属カテゴリ:</strong> ${detail.categories.join(", ")}</p>
+      <p><strong>利用中エージェント:</strong> ${detail.agents.map(a => a.agent_name + " (最終利用: " + a.last_used + ")").join(", ")}</p>
+      <p><strong>エージェント履歴:</strong></p>
+      ${agentHistoryHtml}
+    `;
+    
+    // モーダル表示
+    document.getElementById("detailModal").style.display = "block";
+  } catch (error) {
+    console.error("顧客詳細の取得に失敗しました:", error);
+    alert("詳細情報の取得に失敗しました。");
+  }
+}
+
+// モーダル閉じる処理
+document.getElementById("modalClose").addEventListener("click", function() {
+  document.getElementById("detailModal").style.display = "none";
+});
