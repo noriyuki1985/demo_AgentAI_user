@@ -1,63 +1,55 @@
-async function fetchCustomerData() {
-  try {
-    // 新しいエンドポイントURLを使用。type=getData を付与してアクセスする想定です
-    const url = "https://script.google.com/macros/s/AKfycbyzq_3pNJwBI0FqUD1ctGSjwdBgACgkwjKImxhzMkRRBZ4rMsKs5teScSuTSO_Po1rX/exec?type=getData";
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    console.log("取得データ:", data);
-    
-    const tbody = document.getElementById("userTableBody");
-    tbody.innerHTML = "";
-    
-    data.forEach(record => {
-      // 各プロパティが存在しない場合は空文字列に置換する
-      const userId      = record.user_id       || "";
-      const companyName = record.company_name  || "";
-      const userName    = record.user_name     || "";
-      const role        = record.role          || "";
-      // 今回は、カテゴリはrecord.categories、エージェントはrecord.agents として返される前提
-      const category    = record.categories    || "";
-      const agent       = record.agents        || "";
-      const lastLogin   = record.last_login    || "";
-      
-      // 詳細リンク。クリックするとモーダルなどで詳細が表示されるよう、data-userid属性を付与
-      const detailLink = `<a href="#" class="detail-link" data-userid="${userId}">詳細</a>`;
-      
-      // 権限の値をリンク風に表示
-      const roleDisplay = `<a href="#" class="role-link">${role}</a>`;
-      
-      // カテゴリ、エージェントの各セルに右側に「＋」ボタンを追加
-      const categoryDisplay = `${category} <button class="plus-btn">＋</button>`;
-      const agentDisplay = `${agent} <button class="plus-btn">＋</button>`;
-      
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${userId}</td>
-        <td>${companyName}</td>
-        <td>${userName}</td>
-        <td>${roleDisplay}</td>
-        <td>${categoryDisplay}</td>
-        <td>${agentDisplay}</td>
-        <td>${lastLogin}</td>
-        <td>${detailLink}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-    
-    // 詳細リンクのクリックイベントを登録（モーダルで詳細を表示する処理は detailModal.js 等に実装）
-    const detailLinks = document.querySelectorAll(".detail-link");
-    detailLinks.forEach(link => {
-      link.addEventListener("click", function(e) {
-        e.preventDefault();
-        const userId = this.getAttribute("data-userid");
-        showDetailModal(userId);
-      });
-    });
-    
-  } catch (error) {
-    console.error("顧客データの取得に失敗しました:", error);
-  }
-}
-
-window.onload = fetchCustomerData;
+@@ -0,0 +1,54 @@
+ // 詳細ボタン（モーダル表示）のクリックイベントは dashboard_owner.js で登録済みと仮定して、
+ // 詳細モーダル表示のための関数を定義します。
+ 
+ async function showDetailModal(userId) {
+   try {
+     // 新しく用意するバックエンドAPI（Apps Script側）のURL
+     // このAPIは、クエリパラメータ user_id を受け取って、詳細情報のJSONを返すものとします。
+     const detailUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=YOUR_DETAIL_KEY&lib=YOUR_LIB_ID&type=getUserDetail&user_id=" + encodeURIComponent(userId);
+     const response = await fetch(detailUrl);
+     const detail = await response.json();
+     
+     console.log("取得した詳細:", detail);
+     
+     // モーダルに表示するHTMLを生成
+     const modalBody = document.getElementById("modalBody");
+     // モーダルの例：基本情報、カテゴリ、エージェント、エージェント履歴など
+     // ※ detail.agentHistories は配列、detail.agents もオブジェクト配列で、last_used などが含まれる想定
+     let agentHistoryHtml = "";
+     if (detail.agentHistories && detail.agentHistories.length > 0) {
+       agentHistoryHtml = detail.agentHistories.map(hist => {
+         return `<li>${hist.agent_name} – ${hist.used_at} — ${hist.description}</li>`;
+       }).join("");
+       agentHistoryHtml = `<ul>${agentHistoryHtml}</ul>`;
+     }
+     
+     modalBody.innerHTML = `
+       <h2>顧客詳細</h2>
+       <p><strong>お客様ID:</strong> ${detail.user.user_id}</p>
+       <p><strong>会社名:</strong> ${detail.user.company_name}</p>
+       <p><strong>お名前:</strong> ${detail.user.user_name}</p>
+       <p><strong>権限:</strong> ${detail.user.role}</p>
+       <p><strong>最終ログイン日時:</strong> ${detail.user.last_login}</p>
+       <p><strong>電話番号:</strong> ${detail.user.phone || ""}</p>
+       <p><strong>メールアドレス:</strong> ${detail.user.email || ""}</p>
+       <p><strong>住所:</strong> ${detail.user.address || ""}</p>
+       <p><strong>所属カテゴリ:</strong> ${detail.categories.join(", ")}</p>
+       <p><strong>利用中エージェント:</strong> ${detail.agents.map(a => a.agent_name + " (最終利用: " + a.last_used + ")").join(", ")}</p>
+       <p><strong>エージェント履歴:</strong></p>
+       ${agentHistoryHtml}
+     `;
+     
+     // モーダルを表示
+     document.getElementById("detailModal").style.display = "block";
+     
+   } catch (error) {
+     console.error("顧客詳細の取得に失敗しました:", error);
+     alert("詳細情報の取得に失敗しました。");
+   }
+ }
+ 
+ // モーダル閉じるイベント
+ document.getElementById("modalClose").addEventListener("click", function() {
+   document.getElementById("detailModal").style.display = "none";
+ });
