@@ -3,22 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>ログイン - エージェントAIプラットフォーム</title>
-  <!-- 共通スタイル -->
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* ログインページ専用のスタイル */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    .login-container {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    /* ログインフォーム自体は幅300px */
+    form {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+    }
+    form label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    form input {
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    form button {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-  <h1>ログイン</h1>
-  <form id="loginForm">
-    <label>メールアドレス</label>
-    <input type="email" id="email" placeholder="メールアドレスを入力" required>
-    
-    <label>パスワード</label>
-    <input type="password" id="password" placeholder="パスワードを入力" required>
-    
-    <button type="submit">ログイン</button>
-  </form>
-  
-  <!-- ページ固有の処理 -->
+  <div class="login-container">
+    <form id="loginForm">
+      <label>メールアドレス</label>
+      <input type="email" id="email" placeholder="メールアドレスを入力" required>
+      <label>パスワード</label>
+      <input type="password" id="password" placeholder="パスワードを入力" required>
+      <button type="submit">ログイン</button>
+    </form>
+  </div>
   <script src="js/login.js"></script>
 </body>
 </html>
