@@ -1,0 +1,88 @@
+/* 共通スタイル */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ヘッダー */
+header {
+  height: 60px;
+  background: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+header .title {
+  font-size: 22px;
+  font-weight: bold;
+}
+header .user-info {
+  font-size: 16px;
+}
+
+/* メインエリア */
+#main {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* 顧客一覧パネル */
+.owner-panel {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.owner-panel h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+/* 顧客一覧テーブル */
+.owner-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.owner-table th, .owner-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+.owner-table th {
+  background: #f5f5f5;
+}
+.owner-table a {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* 「＋」ボタンのスタイル */
+.plus-btn {
+  background: none;
+  border: none;
+  color: blue;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+/* 権限リンクのスタイル */
+.role-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 2px 4px;
+  border: 1px solid transparent;
+}
+.role-link:hover {
+  border: 1px solid blue;
+}
